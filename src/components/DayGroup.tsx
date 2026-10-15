@@ -1,13 +1,14 @@
-import type { Lesson, DayOfWeek } from "../types.js";
-import { DAYS } from "../types.js";
+import type { Lesson, DayOfWeek } from "../types";
+import { DAYS } from "../types";
 import LessonCard from "./LessonCard";
 
 interface DayGroupProps {
   day: DayOfWeek;
   lessons: Lesson[];
+  onEdit: (lesson: Lesson) => void;
 }
 
-export default function DayGroup({ day, lessons }: DayGroupProps) {
+export default function DayGroup({ day, lessons, onEdit }: DayGroupProps) {
   const today = new Date();
 
   const todayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1;
@@ -27,7 +28,9 @@ export default function DayGroup({ day, lessons }: DayGroupProps) {
       {lessons.length === 0 ? (
         <p className="text-sm text-gray-400 italic">Занятий нет</p>
       ) : (
-        lessons.map((lesson) => <LessonCard key={lesson.id} lesson={lesson} />)
+        lessons.map((lesson) => (
+          <LessonCard key={lesson.id} lesson={lesson} onEdit={onEdit} />
+        ))
       )}
     </section>
   );

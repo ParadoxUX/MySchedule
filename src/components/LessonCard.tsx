@@ -1,10 +1,14 @@
+import { useAppDispatch } from "../store/hooks";
+import { deleteLesson, toggleTaskDone } from "../store/lessonsSlice";
 import type { Lesson } from "../types";
 
 interface LessonCardProps {
   lesson: Lesson;
+  onEdit: (lesson: Lesson) => void;
 }
 
-export default function LessonCard({ lesson }: LessonCardProps) {
+export default function LessonCard({ lesson, onEdit }: LessonCardProps) {
+  const dispatch = useAppDispatch();
   return (
     <div className="bg-white rounded-2xl p-4 mb-3 shadow-sm border border-gray-100">
       <div className="flex justify-between items-start">
@@ -28,6 +32,28 @@ export default function LessonCard({ lesson }: LessonCardProps) {
           </p>
         </div>
       )}
+      <div className="flex gap-2 mt-3 pt-3 border-t border-gray-100">
+        {lesson.task && (
+          <button
+            onClick={() => dispatch(toggleTaskDone(lesson.id))}
+            className="text-xs px-3 py-1 rounded bg-green-50 text-green-700 font-medium"
+          >
+            {lesson.taskDone ? "Снять отметку" : "Выполнено"}
+          </button>
+        )}
+        <button
+          onClick={() => onEdit(lesson)}
+          className="text-xs px-3 py-1 rounded bg-gray-50 text-green-700 font-medium"
+        >
+          Редактировать
+        </button>
+        <button
+          onClick={() => dispatch(deleteLesson(lesson.id))}
+          className="text-xs px-3 py-1 rounded bg-red-50 text-red-600 font-medium"
+        >
+          Удалить
+        </button>
+      </div>
     </div>
   );
 }
